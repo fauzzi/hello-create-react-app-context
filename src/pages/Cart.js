@@ -1,21 +1,32 @@
-import React from 'react'
-import MainNavigation from '../components/MainNavigation'
-import './Cart.css'
+import React, {useContext, useEffect} from 'react';
+import MainNavigation from '../components/MainNavigation';
+import './Cart.css';
+import ShopContext from './../context/shop-context';
 
-const CartPage = () => (
+const CartPage = () => {
+  
+  const context = useContext(ShopContext)
+  // load didmount
+  useEffect(()=> {
+    console.log(context)
+  })
+
+  return (
     <React.Fragment>
-        <MainNavigation cartItemNumber={2} />
+        <MainNavigation cartItemNumber={context.cart.reduce((count, curItem) => {
+          return count + curItem.quantity
+        }, 0)} />
         <main className="cart">
-            {cartItems.length <= 0 && <p>No Item in the cart</p>}
+            {context.cart.length <= 0 && <p>No Item in the cart</p>}
             <ul>
-            {cartItems.map(cartItem => (
+            {context.cart.map(cartItem => (
               <li key={cartItem.id}>
                 <div>
                   <strong>{cartItem.title}</strong> - ${cartItem.price} (
                   {cartItem.quantity})
                 </div>
                 <div>
-                  <button>
+                  <button onClick={context.removeProductFromCart.bind(this, cartItem.id)}>
                     Remove from Cart
                   </button>
                 </div>
@@ -24,13 +35,8 @@ const CartPage = () => (
           </ul>
         </main>
     </React.Fragment>
-)
+  )    
+}
 
-const cartItems = [
-    { id: 'p1', title: 'Gaming Mouse', price: 29.99, quantity : 2 },
-    { id: 'p2', title: 'Harry Potter 3', price: 9.99, quantity :3 },
-    { id: 'p3', title: 'Used plastic bottle', price: 0.99, quantity : 4 },
-    { id: 'p4', title: 'Half-dried plant', price: 2.99, quantity : 1 }
-]
 
 export default CartPage

@@ -1,18 +1,27 @@
 import React from 'react'
 import MainNavigation from '../components/MainNavigation'
 import './Products.css'
-const ProductPage = props => (
-    <React.Fragment>
-        <MainNavigation cartItemNumber={2} />
+import ShopContext from './../context/shop-context'
+
+const ProductPage = () => (  
+  <ShopContext.Consumer>
+    {context => (      
+      <React.Fragment>
+        <MainNavigation cartItemNumber={context.cart.reduce((count, curItem)=> {
+          return count + curItem.quantity
+        },10)} 
+        />
         <main className="products">
         <ul>
-            {products.map(product => (
+            {context.products.map(product => (
               <li key={product.id}>
                 <div>
                   <strong>{product.title}</strong> - ${product.price}
                 </div>
                 <div>
-                  <button>
+                  <button
+                    onClick={context.addProductToCart.bind(this, product)}
+                  >
                     Add to Cart
                   </button>
                 </div>
@@ -20,14 +29,8 @@ const ProductPage = props => (
             ))}
           </ul>
         </main>        
-    </React.Fragment>    
+      </React.Fragment>   
+    )}     
+  </ShopContext.Consumer>    
 )
-
-
-const products = [
-    { id: 'p1', title: 'Gaming Mouse', price: 29.99 },
-    { id: 'p2', title: 'Harry Potter 3', price: 9.99 },
-    { id: 'p3', title: 'Used plastic bottle', price: 0.99 },
-    { id: 'p4', title: 'Half-dried plant', price: 2.99 }
-]
 export default ProductPage
