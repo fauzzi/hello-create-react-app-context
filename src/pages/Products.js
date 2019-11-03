@@ -9,7 +9,7 @@ const ProductPage = () => (
       <React.Fragment>
         <MainNavigation cartItemNumber={context.cart.reduce((count, curItem)=> {
           return count + curItem.quantity
-        },10)} 
+        },0)} 
         />
         <main className="products">
         <ul>
